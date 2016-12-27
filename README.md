@@ -22,7 +22,7 @@ If you do not provide a name, it will automatically use the function name
 AddCallable((Action)Woof);
 InvokeCallable("Woof"); 
 
-static void Woof()
+void Woof()
 {
     Console.WriteLine("Woof, Woof!");
 }
@@ -32,8 +32,8 @@ When getting a value, you must provide a return type in the `InvokeCallable` and
 
 ```cs
 AddCallable("Under10", (Func<int, bool>)IsUnderTen);
-bool result = InvokeCallable<bool>("Under10");                                                                     
-static bool IsUnderTen(int number)
+bool result = InvokeCallable<bool>("Under10");      
+bool IsUnderTen(int number)
 {
     if(number < 10)
     {
@@ -42,3 +42,24 @@ static bool IsUnderTen(int number)
     return false;
 }
 ```
+
+Callable groups allow you to add multiple groups under one name space and call all of them one after another! Use as shown below.
+
+```cs
+AddCallable("WoofMethod", (Action)Meow);
+AddCallable("MeowMethod", (Action)Woof);
+AddCallableGroup("Animals", "WoofMethod", "MeowMethod");
+InvokeCallableGroup("Animals");
+void Meow()
+{
+    Console.WriteLine("Meow, meow!");
+}
+void Woof()
+{
+    Console.WriteLine("Woof, Woof!");
+}
+ ```
+ 
+ Output:
+ ```Meow Meow! 
+ Woof, Woof!```
